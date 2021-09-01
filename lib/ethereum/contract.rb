@@ -212,6 +212,8 @@ module Ethereum
     def parse_filter_data(evt, logs)
       formatter = Ethereum::Formatter.new
       collection = []
+      puts "parse_filter_data"
+      p logs
       logs["result"].each do |result|
         inputs = evt.input_types
         outputs = inputs.zip(result["topics"][1..-1])

@@ -212,15 +212,11 @@ module Ethereum
     def parse_filter_data(evt, logs)
       formatter = Ethereum::Formatter.new
       collection = []
-      puts "parse_filter_data"
-      p logs
       logs["result"].each do |result|
         inputs = evt.input_types
         outputs = inputs.zip(result["topics"][1..-1])
         data = {blockNumber: result["blockNumber"].hex, transactionHash: result["transactionHash"], blockHash: result["blockHash"], transactionIndex: result["transactionIndex"].hex, topics: []}
         outputs.each do |output|
-          # puts " output"
-          # p output
           if output.last.nil?
             output = [output.first, result["data"]] if result["data"]
           end
@@ -326,7 +322,7 @@ module Ethereum
         parent = self
         call_raw_proxy, call_proxy, transact_proxy, transact_and_wait_proxy = Class.new, Class.new, Class.new, Class.new
         @functions.each do |fun|
-          call_raw_proxy.send(:define_method, parent.function_name(fun)) { |*args| p fun; p args; parent.call_raw(fun, *args) }
+          call_raw_proxy.send(:define_method, parent.function_name(fun)) { |*args| parent.call_raw(fun, *args) }
           call_proxy.send(:define_method, parent.function_name(fun)) { |*args| parent.call(fun, *args) }
           transact_proxy.send(:define_method, parent.function_name(fun)) { |*args| parent.transact(fun, *args) }
           transact_and_wait_proxy.send(:define_method, parent.function_name(fun)) { |*args| parent.transact_and_wait(fun, *args) }

@@ -17,6 +17,7 @@ module Ethereum
   require 'ethereum/function_input'
   require 'ethereum/function_output'
   require 'ethereum/contract_event'
+  require 'ethereum/exceptions'
   require 'ethereum/encoder'
   require 'ethereum/decoder'
   require 'ethereum/formatter'

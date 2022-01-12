@@ -86,7 +86,7 @@ module Ethereum
     end
 
     def encode_arguments(inputs, args)
-      raise "Wrong number of arguments" if inputs.length != args.length
+      raise Ethereum::EncoderArgumentError, "Wrong number of arguments" if inputs.length != args.length
       @head = ""
       @tail = ""
       @inputs = inputs

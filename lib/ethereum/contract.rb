@@ -212,15 +212,17 @@ module Ethereum
     def parse_filter_data(evt, logs)
       formatter = Ethereum::Formatter.new
       collection = []
-      puts "parse_filter_data"
-      p logs
       logs["result"].each do |result|
         inputs = evt.input_types
         outputs = inputs.zip(result["topics"][1..-1])
         data = {blockNumber: result["blockNumber"].hex, transactionHash: result["transactionHash"], blockHash: result["blockHash"], transactionIndex: result["transactionIndex"].hex, topics: []}
         outputs.each do |output|
+          if output.last.nil?
+            output = [output.first, result["data"]] if result["data"]
+          end
           data[:topics] << formatter.from_payload(output)
         end
+
         collection << data
       end
       return collection
@@ -264,7 +266,11 @@ module Ethereum
           parent
         end
       end
-      Ethereum::Contract.send(:remove_const, class_name) if Ethereum::Contract.const_defined?(class_name, false)
+      begin
+        Ethereum::Contract.send(:remove_const, class_name) if Ethereum::Contract.const_defined?(class_name, false)
+      rescue => e
+        raise Ethereum::ContractNameError, "Invalid name for contract singleton" if e.message.include? "wrong constant name"
+      end
       Ethereum::Contract.const_set(class_name, class_methods)
       @class_object = class_methods
     end

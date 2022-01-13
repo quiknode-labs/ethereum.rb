@@ -1,7 +1,7 @@
 require "ethereum/version"
 require 'active_support'
 require 'active_support/core_ext'
-require 'digest/sha3'
+require 'digest/keccak'
 
 module Ethereum
   require 'ethereum/abi'
@@ -17,6 +17,7 @@ module Ethereum
   require 'ethereum/function_input'
   require 'ethereum/function_output'
   require 'ethereum/contract_event'
+  require 'ethereum/exceptions'
   require 'ethereum/encoder'
   require 'ethereum/decoder'
   require 'ethereum/formatter'
